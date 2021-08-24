@@ -4,7 +4,7 @@
 
 # Import modules
 ## Flask App
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, abort
 ## Forms
 from forms import LoginForm, RegisterForm
 ## Database Management
@@ -86,6 +86,8 @@ def home():
 @login_required
 def show_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
+    if todolist.author != current_user:
+        return abort(503)
     return render_template('index.html', todo=todolist)
 
 # CRUD Todolist
@@ -104,6 +106,8 @@ def add_list():
 @login_required
 def edit_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
+    if todolist.author != current_user:
+        return abort(503)
     todolist.name = request.form.get('listname')
     db.session.commit()
     return redirect(url_for('show_list', id=todolist.id))
@@ -113,6 +117,8 @@ def edit_list(id):
 @login_required
 def delete_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
+    if todolist.author != current_user:
+        return abort(503)
     for activity in todolist.activities:
         db.session.delete(activity)
         db.session.commit()
@@ -126,6 +132,8 @@ def delete_list(id):
 @login_required
 def add_activity(id):
     todolist = ToDoList.query.filter_by(id=id).first()
+    if todolist.author != current_user:
+        return abort(503)
     new_activity = Activity(
         name= request.form.get('activity'),
         parent_list = todolist
@@ -139,6 +147,8 @@ def add_activity(id):
 @login_required
 def update_activity(list_id, activity_id):
     todolist = ToDoList.query.filter_by(id=list_id).first()
+    if todolist.author != current_user:
+        return abort(503)
     activity = Activity.query.filter_by(id=activity_id).first()
     activity.name = request.form.get('activity')
     db.session.commit()
@@ -149,6 +159,8 @@ def update_activity(list_id, activity_id):
 @login_required
 def delete_activity(list_id, activity_id):
     todolist = ToDoList.query.filter_by(id=list_id).first()
+    if todolist.author != current_user:
+        return abort(503)
     activity = Activity.query.filter_by(id=activity_id).first()
     db.session.delete(activity)
     db.session.commit()
