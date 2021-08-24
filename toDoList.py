@@ -61,7 +61,7 @@ class Activity(db.Model):
     parent_list = relationship("ToDoList", back_populates='activities')
 
 # Paste uncommented extra code snippet here!
-db.create_all()
+# db.create_all()
 
 # Default loading user function
 @login_manager.user_loader
