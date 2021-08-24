@@ -55,8 +55,6 @@ class Activity(db.Model):
     __tablename__ = 'activities'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(500), nullable=False)
-    color = db.Column(db.String(255))
-    star = db.Column(db.Boolean)
     list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'))
     parent_list = relationship("ToDoList", back_populates='activities')
 
@@ -130,7 +128,6 @@ def add_activity(id):
     todolist = ToDoList.query.filter_by(id=id).first()
     new_activity = Activity(
         name= request.form.get('activity'),
-        star=False,
         parent_list = todolist
     )
     db.session.add(new_activity)
@@ -138,9 +135,6 @@ def add_activity(id):
     return redirect(url_for('show_list', id=todolist.id))
 
 ## Update Activity
-# TODO:
-### Star Activity
-### Color Activity
 @app.route('/todolist/<int:list_id>/activity/<int:activity_id>/update', methods=['POST'])
 @login_required
 def update_activity(list_id, activity_id):
