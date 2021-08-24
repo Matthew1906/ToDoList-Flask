@@ -87,7 +87,7 @@ def home():
 def show_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     return render_template('index.html', todo=todolist)
 
 # CRUD Todolist
@@ -107,7 +107,7 @@ def add_list():
 def edit_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     todolist.name = request.form.get('listname')
     db.session.commit()
     return redirect(url_for('show_list', id=todolist.id))
@@ -118,7 +118,7 @@ def edit_list(id):
 def delete_list(id):
     todolist = ToDoList.query.filter_by(id=id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     for activity in todolist.activities:
         db.session.delete(activity)
         db.session.commit()
@@ -133,7 +133,7 @@ def delete_list(id):
 def add_activity(id):
     todolist = ToDoList.query.filter_by(id=id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     new_activity = Activity(
         name= request.form.get('activity'),
         parent_list = todolist
@@ -148,7 +148,7 @@ def add_activity(id):
 def update_activity(list_id, activity_id):
     todolist = ToDoList.query.filter_by(id=list_id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     activity = Activity.query.filter_by(id=activity_id).first()
     activity.name = request.form.get('activity')
     db.session.commit()
@@ -160,7 +160,7 @@ def update_activity(list_id, activity_id):
 def delete_activity(list_id, activity_id):
     todolist = ToDoList.query.filter_by(id=list_id).first()
     if todolist.author != current_user:
-        return abort(503)
+        return abort(401)
     activity = Activity.query.filter_by(id=activity_id).first()
     db.session.delete(activity)
     db.session.commit()
