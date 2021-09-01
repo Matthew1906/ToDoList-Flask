@@ -17,4 +17,4 @@ Sorry for the 'not cool or even responsive' web design. I'm not exactly experien
 4. Download all the dependencies (modules) by typing 'python -m pip install -r requirements.txt'
 5. Before starting the application, you need to create the database locally (using sqlite) in the python script (and comment them afterwards)
 6. Lastly, don't forget to setup SECRET_KEY in .env file so that the program can start
-7. Start the application by running the code, and then go to 'http://127.0.0.1:5000/'
+7. Start the application by running the code, and then go to http://127.0.0.1:5000/
